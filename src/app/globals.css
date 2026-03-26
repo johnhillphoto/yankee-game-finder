@@ -1,21 +1,21 @@
-/* NY Yankees Color Scheme */
-/* Primary: Navy Blue #0C2340 */
-/* Secondary: White #FFFFFF */
-/* Accent: Silver/Gray #C4CDD6 */
-/* Gold accent: #C4A862 */
+/* Team-aware Color Scheme */
+/* CSS variables set to NY Yankees defaults; overridden at runtime per selected team */
 
 @import "tailwindcss";
 
 :root {
-  --yankees-navy: #0c2340;
-  --yankees-navy-light: #1a3a5c;
-  --yankees-navy-dark: #071729;
-  --yankees-white: #ffffff;
-  --yankees-silver: #c4cdd6;
-  --yankees-gray: #8a9db5;
-  --yankees-gold: #c4a862;
-  --yankees-red: #c8102e; /* for losses */
-  --yankees-green: #2d8a4e; /* for wins */
+  /* Team theme colors (defaults: NY Yankees) */
+  --team-primary: #0c2340;
+  --team-primary-light: #1a3a5c;
+  --team-primary-dark: #071729;
+  --team-secondary: #c4a862;
+
+  /* Fixed UI colors */
+  --color-white: #ffffff;
+  --color-silver: #c4cdd6;
+  --color-gray: #8a9db5;
+  --color-red: #c8102e;
+  --color-green: #2d8a4e;
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     sans-serif;
 }
@@ -31,15 +31,15 @@ body {
   min-height: 100vh;
   background-color: #f0f4f8;
   font-family: var(--font-sans);
-  color: var(--yankees-navy);
+  color: var(--team-primary);
 }
 
 /* =========================================
    SITE HEADER
    ========================================= */
 .site-header {
-  background: var(--yankees-navy);
-  border-bottom: 3px solid var(--yankees-gold);
+  background: var(--team-primary);
+  border-bottom: 3px solid var(--team-secondary);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -60,6 +60,14 @@ body {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .header-logo {
@@ -70,7 +78,7 @@ body {
 .header-title {
   font-size: 1.2rem;
   font-weight: 800;
-  color: var(--yankees-white);
+  color: var(--color-white);
   letter-spacing: 0.02em;
   white-space: nowrap;
 }
@@ -88,27 +96,27 @@ body {
   border-radius: 6px;
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--yankees-silver);
+  color: var(--color-silver);
   text-decoration: none;
   transition: background 0.2s, color 0.2s;
   border: 1px solid transparent;
 }
 
 .nav-link:hover {
-  background: var(--yankees-navy-light);
-  color: var(--yankees-white);
-  border-color: var(--yankees-silver);
+  background: var(--team-primary-light);
+  color: var(--color-white);
+  border-color: var(--color-silver);
 }
 
 .nav-link-active {
-  background: var(--yankees-gold);
-  color: var(--yankees-navy) !important;
-  border-color: var(--yankees-gold);
+  background: var(--team-secondary);
+  color: var(--team-primary) !important;
+  border-color: var(--team-secondary);
 }
 
 .nav-link-active:hover {
-  background: #d4b870;
-  border-color: #d4b870;
+  filter: brightness(1.1);
+  border-color: var(--team-secondary);
 }
 
 /* =========================================
@@ -119,16 +127,16 @@ body {
 }
 
 .site-footer {
-  background: var(--yankees-navy);
-  border-top: 2px solid var(--yankees-navy-light);
+  background: var(--team-primary);
+  border-top: 2px solid var(--team-primary-light);
   padding: 1rem 1.5rem;
   text-align: center;
-  color: var(--yankees-gray);
+  color: var(--color-gray);
   font-size: 0.8rem;
 }
 
 .footer-link {
-  color: var(--yankees-gold);
+  color: var(--team-secondary);
   text-decoration: none;
 }
 
@@ -147,14 +155,14 @@ body {
 
 .page-header {
   margin-bottom: 1.5rem;
-  border-left: 4px solid var(--yankees-gold);
+  border-left: 4px solid var(--team-secondary);
   padding-left: 1rem;
 }
 
 .page-title {
   font-size: 1.6rem;
   font-weight: 800;
-  color: var(--yankees-navy);
+  color: var(--team-primary);
   letter-spacing: -0.01em;
 }
 
@@ -177,27 +185,27 @@ body {
    FEATURED GAME (Next Game)
    ========================================= */
 .featured-game .game-card {
-  border-color: var(--yankees-gold);
+  border-color: var(--team-secondary);
   background: linear-gradient(
     135deg,
-    var(--yankees-navy) 0%,
-    var(--yankees-navy-light) 100%
+    var(--team-primary) 0%,
+    var(--team-primary-light) 100%
   );
-  color: var(--yankees-white);
+  color: var(--color-white);
 }
 
 .featured-game .game-date,
 .featured-game .venue,
 .featured-game .team-label {
-  color: var(--yankees-silver) !important;
+  color: var(--color-silver) !important;
 }
 
 .featured-game .vs {
-  color: var(--yankees-gold) !important;
+  color: var(--team-secondary) !important;
 }
 
 .featured-game .team-score {
-  color: var(--yankees-white) !important;
+  color: var(--color-white) !important;
 }
 
 .next-game-label {
@@ -205,7 +213,7 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--yankees-gold);
+  color: var(--team-secondary);
   margin-bottom: 0.35rem;
   padding-left: 0.15rem;
 }
@@ -263,13 +271,13 @@ body {
 }
 
 .badge-home {
-  background: var(--yankees-navy);
-  color: var(--yankees-white);
+  background: var(--team-primary);
+  color: var(--color-white);
 }
 
 .badge-away {
   background: #e8edf3;
-  color: var(--yankees-navy);
+  color: var(--team-primary);
 }
 
 .badge-live {
@@ -279,12 +287,12 @@ body {
 }
 
 .badge-win {
-  background: var(--yankees-green);
+  background: var(--color-green);
   color: white;
 }
 
 .badge-loss {
-  background: var(--yankees-red);
+  background: var(--color-red);
   color: white;
 }
 
@@ -316,7 +324,8 @@ body {
   min-width: 0;
 }
 
-.team:last-child {
+/* Home team (right side) is right-aligned */
+.team-right {
   justify-content: flex-end;
   text-align: right;
 }
@@ -324,7 +333,7 @@ body {
 .team-label {
   font-size: 1rem;
   font-weight: 700;
-  color: var(--yankees-navy);
+  color: var(--team-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -333,7 +342,7 @@ body {
 .team-score {
   font-size: 1.5rem;
   font-weight: 900;
-  color: var(--yankees-navy);
+  color: var(--team-primary);
   letter-spacing: -0.02em;
   line-height: 1;
 }
@@ -341,9 +350,15 @@ body {
 .vs {
   font-size: 0.75rem;
   font-weight: 800;
-  color: var(--yankees-gold);
+  color: var(--team-secondary);
   letter-spacing: 0.1em;
   flex-shrink: 0;
+}
+
+/* Highlight the selected team in the matchup */
+.team-selected .team-label {
+  color: var(--team-primary);
+  font-weight: 800;
 }
 
 /* =========================================
@@ -377,7 +392,7 @@ body {
   font-size: 0.72rem;
   font-weight: 600;
   background: #e8edf3;
-  color: var(--yankees-navy);
+  color: var(--team-primary);
   border: 1px solid #c8d4e3;
   white-space: nowrap;
 }
@@ -404,7 +419,7 @@ body {
   width: 32px;
   height: 32px;
   border: 3px solid #d8e2ed;
-  border-top-color: var(--yankees-navy);
+  border-top-color: var(--team-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -464,6 +479,40 @@ body {
 }
 
 /* =========================================
+   TEAM SELECTOR
+   ========================================= */
+.team-selector {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--team-primary-dark);
+  color: var(--color-white);
+  border: 1px solid var(--team-secondary);
+  border-radius: 6px;
+  padding: 0.4rem 2rem 0.4rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  outline: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23ffffff' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  transition: border-color 0.2s;
+  max-width: 180px;
+}
+
+.team-selector:hover,
+.team-selector:focus {
+  border-color: var(--color-white);
+}
+
+.team-selector option,
+.team-selector optgroup {
+  background: #1a1a2e;
+  color: var(--color-white);
+}
+
+/* =========================================
    RESPONSIVE
    ========================================= */
 @media (max-width: 600px) {
@@ -474,6 +523,11 @@ body {
     padding: 0.75rem 1rem;
   }
 
+  .header-right {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
   .header-title {
     font-size: 1rem;
   }
@@ -481,6 +535,11 @@ body {
   .nav-link {
     font-size: 0.8rem;
     padding: 0.35rem 0.75rem;
+  }
+
+  .team-selector {
+    max-width: 100%;
+    width: 100%;
   }
 
   .page-container {

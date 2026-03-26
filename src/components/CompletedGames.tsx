@@ -3,30 +3,33 @@
 import { useState, useEffect, useCallback } from "react";
 import GameCard from "@/components/GameCard";
 import InfiniteScroll from "@/components/InfiniteScroll";
+import { useTeam } from "@/lib/team-context";
 import type { Game } from "@/lib/mlb-api";
 
 const PAGE_SIZE = 20;
 
 export default function CompletedGames() {
+  const { team } = useTeam();
   const [games, setGames] = useState<Game[]>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [initialized, setInitialized] = useState(false);
   const [usingMockData, setUsingMockData] = useState(false);
   const [totalGames, setTotalGames] = useState(0);
 
   const loadGames = useCallback(
-    async (pageNum: number) => {
-      if (loading) return;
+    async (teamId: number, pageNum: number) => {
       setLoading(true);
       setError(null);
       try {
         const res = await fetch(
-          `/api/games/completed?page=${pageNum}&pageSize=${PAGE_SIZE}`
+          `/api/games/completed?page=${pageNum}&pageSize=${PAGE_SIZE}&teamId=${teamId}`
         );
-        if (!res.ok) throw new Error(`Error: ${res.status}`);
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error ?? `Error: ${res.status}`);
+        }
         const data = await res.json();
         if (data.usingMockData) setUsingMockData(true);
         setTotalGames(data.totalGames);
@@ -38,23 +41,29 @@ export default function CompletedGames() {
         setPage(pageNum + 1);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load games");
+        setHasMore(false);
       } finally {
         setLoading(false);
       }
     },
-    [loading]
+    []
   );
 
+  // Reset and reload whenever the selected team changes
   useEffect(() => {
-    if (!initialized) {
-      setInitialized(true);
-      loadGames(0);
-    }
-  }, [initialized, loadGames]);
+    setGames([]);
+    setPage(0);
+    setHasMore(true);
+    setUsingMockData(false);
+    setTotalGames(0);
+    setError(null);
+    loadGames(team.id, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [team.id]);
 
   const handleLoadMore = useCallback(() => {
-    loadGames(page);
-  }, [loadGames, page]);
+    loadGames(team.id, page);
+  }, [loadGames, team.id, page]);
 
   return (
     <div>
