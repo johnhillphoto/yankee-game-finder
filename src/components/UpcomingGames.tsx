@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import GameCard from "@/components/GameCard";
 import InfiniteScroll from "@/components/InfiniteScroll";
+import { useTeam } from "@/lib/team-context";
 import type { Game } from "@/lib/mlb-api";
 
 // Initial load: today's next game + 5 more = 6 total
@@ -10,26 +11,28 @@ const INITIAL_SIZE = 6;
 const PAGE_SIZE = 5;
 
 export default function UpcomingGames() {
+  const { team } = useTeam();
   const [games, setGames] = useState<Game[]>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [initialized, setInitialized] = useState(false);
   const [usingMockData, setUsingMockData] = useState(false);
   const [totalGames, setTotalGames] = useState(0);
   const [loadedCount, setLoadedCount] = useState(0);
 
   const loadGames = useCallback(
-    async (pageNum: number, pageSize: number) => {
-      if (loading) return;
+    async (teamId: number, pageNum: number, pageSize: number) => {
       setLoading(true);
       setError(null);
       try {
         const res = await fetch(
-          `/api/games/upcoming?page=${pageNum}&pageSize=${pageSize}`
+          `/api/games/upcoming?page=${pageNum}&pageSize=${pageSize}&teamId=${teamId}`
         );
-        if (!res.ok) throw new Error(`Error: ${res.status}`);
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error ?? `Error: ${res.status}`);
+        }
         const data = await res.json();
         if (data.usingMockData) setUsingMockData(true);
         setTotalGames(data.totalGames);
@@ -42,23 +45,29 @@ export default function UpcomingGames() {
         setPage(pageNum === 0 ? 1 : pageNum + 1);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load games");
+        setHasMore(false);
       } finally {
         setLoading(false);
       }
     },
-    [loading]
+    []
   );
 
+  // Reset and reload whenever the selected team changes
   useEffect(() => {
-    if (!initialized) {
-      setInitialized(true);
-      loadGames(0, INITIAL_SIZE);
-    }
-  }, [initialized, loadGames]);
+    setGames([]);
+    setPage(0);
+    setHasMore(true);
+    setUsingMockData(false);
+    setTotalGames(0);
+    setLoadedCount(0);
+    setError(null);
+    loadGames(team.id, 0, INITIAL_SIZE);
+  }, [team.id, loadGames]);
 
   const handleLoadMore = useCallback(() => {
-    loadGames(page, PAGE_SIZE);
-  }, [loadGames, page]);
+    loadGames(team.id, page, PAGE_SIZE);
+  }, [loadGames, team.id, page]);
 
   return (
     <div>

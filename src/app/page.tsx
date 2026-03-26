@@ -1,14 +1,10 @@
 import UpcomingGames from "@/components/UpcomingGames";
+import PageHeader from "@/components/PageHeader";
 
 export default function HomePage() {
   return (
     <div className="page-container">
-      <div className="page-header">
-        <h2 className="page-title">Upcoming Games</h2>
-        <p className="page-subtitle">
-          Stay up to date with the New York Yankees schedule
-        </p>
-      </div>
+      <PageHeader title="Upcoming Games" subtitleType="upcoming" />
       <UpcomingGames />
     </div>
   );

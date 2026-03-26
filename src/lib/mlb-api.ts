@@ -1,5 +1,4 @@
 // MLB Stats API utilities
-// Yankees team ID: 147
 // API base: https://statsapi.mlb.com/api/v1
 
 export const YANKEES_TEAM_ID = 147;
@@ -48,11 +47,11 @@ function formatDate(date: Date): string {
   return `${y}-${m}-${d}`;
 }
 
-function parseGames(dates: ScheduleDate[]): Game[] {
+function parseGames(dates: ScheduleDate[], teamId: number): Game[] {
   const games: Game[] = [];
   for (const dateObj of dates) {
     for (const game of dateObj.games) {
-      const isHome = game.teams.home.team.id === YANKEES_TEAM_ID;
+      const isHome = game.teams.home.team.id === teamId;
       const opponent = isHome ? game.teams.away.team : game.teams.home.team;
       games.push({
         gamePk: game.gamePk,
@@ -91,6 +90,7 @@ interface RawGame {
 }
 
 export async function fetchUpcomingGames(
+  teamId: number = YANKEES_TEAM_ID,
   page: number = 0,
   pageSize: number = 5
 ): Promise<GamesResponse> {
@@ -102,13 +102,13 @@ export async function fetchUpcomingGames(
   const startDateStr = formatDate(today);
   const endDateStr = formatDate(endDate);
 
-  const url = `${MLB_API_BASE}/schedule?sportId=1&teamId=${YANKEES_TEAM_ID}&startDate=${startDateStr}&endDate=${endDateStr}&gameType=R,F,D,L,W&hydrate=broadcasts(all),linescore,team`;
+  const url = `${MLB_API_BASE}/schedule?sportId=1&teamId=${teamId}&startDate=${startDateStr}&endDate=${endDateStr}&gameType=R,F,D,L,W&hydrate=broadcasts(all),linescore,team`;
 
   const res = await fetch(url, { next: { revalidate: 300 } });
   if (!res.ok) throw new Error(`MLB API error: ${res.status}`);
   const data = await res.json();
 
-  const allGames = parseGames(data.dates || []);
+  const allGames = parseGames(data.dates || [], teamId);
 
   // Filter upcoming (not yet Final)
   const upcoming = allGames.filter(
@@ -124,6 +124,7 @@ export async function fetchUpcomingGames(
 }
 
 export async function fetchCompletedGames(
+  teamId: number = YANKEES_TEAM_ID,
   page: number = 0,
   pageSize: number = 20
 ): Promise<GamesResponse> {
@@ -133,13 +134,13 @@ export async function fetchCompletedGames(
   const startDateStr = formatDate(seasonStart);
   const endDateStr = formatDate(today);
 
-  const url = `${MLB_API_BASE}/schedule?sportId=1&teamId=${YANKEES_TEAM_ID}&startDate=${startDateStr}&endDate=${endDateStr}&gameType=R,F,D,L,W&hydrate=broadcasts(all),linescore,team`;
+  const url = `${MLB_API_BASE}/schedule?sportId=1&teamId=${teamId}&startDate=${startDateStr}&endDate=${endDateStr}&gameType=R,F,D,L,W&hydrate=broadcasts(all),linescore,team`;
 
   const res = await fetch(url, { next: { revalidate: 300 } });
   if (!res.ok) throw new Error(`MLB API error: ${res.status}`);
   const data = await res.json();
 
-  const allGames = parseGames(data.dates || []);
+  const allGames = parseGames(data.dates || [], teamId);
 
   // Filter completed (Final)
   const completed = allGames

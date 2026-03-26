@@ -28,19 +28,10 @@ function getBroadcastNames(game: Game): string[] {
     .filter((v, i, a) => a.indexOf(v) === i); // deduplicate
 }
 
-function getScore(game: Game): { yankeesScore: number; opponentScore: number } {
-  const yankeesTeam = game.isHome ? game.teams.home : game.teams.away;
-  const opponentTeam = game.isHome ? game.teams.away : game.teams.home;
-  return {
-    yankeesScore: yankeesTeam.score ?? 0,
-    opponentScore: opponentTeam.score ?? 0,
-  };
-}
-
 function getGameResult(game: Game): "W" | "L" | null {
   if (game.status.abstractGameState !== "Final") return null;
-  const yankeesTeam = game.isHome ? game.teams.home : game.teams.away;
-  return yankeesTeam.isWinner ? "W" : "L";
+  const selectedTeam = game.isHome ? game.teams.home : game.teams.away;
+  return selectedTeam.isWinner ? "W" : "L";
 }
 
 export default function GameCard({ game, showScore = false }: GameCardProps) {
@@ -48,7 +39,9 @@ export default function GameCard({ game, showScore = false }: GameCardProps) {
   const isLive = game.status.abstractGameState === "Live";
   const isFinal = game.status.abstractGameState === "Final";
   const result = isFinal ? getGameResult(game) : null;
-  const score = showScore ? getScore(game) : null;
+
+  const awayTeam = game.teams.away;
+  const homeTeam = game.teams.home;
 
   return (
     <div className="game-card">
@@ -68,20 +61,20 @@ export default function GameCard({ game, showScore = false }: GameCardProps) {
         </div>
       </div>
 
-      {/* Matchup */}
+      {/* Matchup: away @ home */}
       <div className="game-matchup">
-        <div className="team">
-          <span className="team-label">NY YANKEES</span>
-          {showScore && score !== null && (
-            <span className="team-score">{score.yankeesScore}</span>
+        <div className={`team${!game.isHome ? " team-selected" : ""}`}>
+          <span className="team-label">{awayTeam.team.name.toUpperCase()}</span>
+          {showScore && awayTeam.score !== undefined && (
+            <span className="team-score">{awayTeam.score}</span>
           )}
         </div>
-        <span className="vs">VS</span>
-        <div className="team">
-          <span className="team-label">{game.opponent.name}</span>
-          {showScore && score !== null && (
-            <span className="team-score">{score.opponentScore}</span>
+        <span className="vs">@</span>
+        <div className={`team team-right${game.isHome ? " team-selected" : ""}`}>
+          {showScore && homeTeam.score !== undefined && (
+            <span className="team-score">{homeTeam.score}</span>
           )}
+          <span className="team-label">{homeTeam.team.name.toUpperCase()}</span>
         </div>
       </div>
 
