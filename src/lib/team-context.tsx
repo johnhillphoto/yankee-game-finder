@@ -54,7 +54,11 @@ export function TeamProvider({
 
   const setTeamId = useCallback((id: number) => {
     setTeamIdState(id);
-    document.cookie = `${COOKIE_NAME}=${id}; path=/; max-age=${COOKIE_MAX_AGE}; SameSite=Lax`;
+    const secure =
+      typeof window !== "undefined" && window.location.protocol === "https:"
+        ? "; Secure"
+        : "";
+    document.cookie = `${COOKIE_NAME}=${id}; path=/; max-age=${COOKIE_MAX_AGE}; SameSite=Lax${secure}`;
   }, []);
 
   return (

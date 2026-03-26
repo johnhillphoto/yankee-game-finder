@@ -58,8 +58,7 @@ export default function CompletedGames() {
     setTotalGames(0);
     setError(null);
     loadGames(team.id, 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [team.id]);
+  }, [team.id, loadGames]);
 
   const handleLoadMore = useCallback(() => {
     loadGames(team.id, page);

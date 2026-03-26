@@ -63,8 +63,7 @@ export default function UpcomingGames() {
     setLoadedCount(0);
     setError(null);
     loadGames(team.id, 0, INITIAL_SIZE);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [team.id]);
+  }, [team.id, loadGames]);
 
   const handleLoadMore = useCallback(() => {
     loadGames(team.id, page, PAGE_SIZE);
