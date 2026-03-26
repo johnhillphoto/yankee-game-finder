@@ -1,0 +1,509 @@
+/* NY Yankees Color Scheme */
+/* Primary: Navy Blue #0C2340 */
+/* Secondary: White #FFFFFF */
+/* Accent: Silver/Gray #C4CDD6 */
+/* Gold accent: #C4A862 */
+
+@import "tailwindcss";
+
+:root {
+  --yankees-navy: #0c2340;
+  --yankees-navy-light: #1a3a5c;
+  --yankees-navy-dark: #071729;
+  --yankees-white: #ffffff;
+  --yankees-silver: #c4cdd6;
+  --yankees-gray: #8a9db5;
+  --yankees-gold: #c4a862;
+  --yankees-red: #c8102e; /* for losses */
+  --yankees-green: #2d8a4e; /* for wins */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  min-height: 100vh;
+  background-color: #f0f4f8;
+  font-family: var(--font-sans);
+  color: var(--yankees-navy);
+}
+
+/* =========================================
+   SITE HEADER
+   ========================================= */
+.site-header {
+  background: var(--yankees-navy);
+  border-bottom: 3px solid var(--yankees-gold);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+
+.header-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.header-logo {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.header-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--yankees-white);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.header-nav {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  display: inline-block;
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--yankees-silver);
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  border: 1px solid transparent;
+}
+
+.nav-link:hover {
+  background: var(--yankees-navy-light);
+  color: var(--yankees-white);
+  border-color: var(--yankees-silver);
+}
+
+.nav-link-active {
+  background: var(--yankees-gold);
+  color: var(--yankees-navy) !important;
+  border-color: var(--yankees-gold);
+}
+
+.nav-link-active:hover {
+  background: #d4b870;
+  border-color: #d4b870;
+}
+
+/* =========================================
+   SITE MAIN & FOOTER
+   ========================================= */
+.site-main {
+  min-height: calc(100vh - 130px);
+}
+
+.site-footer {
+  background: var(--yankees-navy);
+  border-top: 2px solid var(--yankees-navy-light);
+  padding: 1rem 1.5rem;
+  text-align: center;
+  color: var(--yankees-gray);
+  font-size: 0.8rem;
+}
+
+.footer-link {
+  color: var(--yankees-gold);
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+/* =========================================
+   PAGE LAYOUT
+   ========================================= */
+.page-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.page-header {
+  margin-bottom: 1.5rem;
+  border-left: 4px solid var(--yankees-gold);
+  padding-left: 1rem;
+}
+
+.page-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--yankees-navy);
+  letter-spacing: -0.01em;
+}
+
+.page-subtitle {
+  font-size: 0.95rem;
+  color: #5a6a80;
+  margin-top: 0.2rem;
+}
+
+/* =========================================
+   GAMES LIST
+   ========================================= */
+.games-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* =========================================
+   FEATURED GAME (Next Game)
+   ========================================= */
+.featured-game .game-card {
+  border-color: var(--yankees-gold);
+  background: linear-gradient(
+    135deg,
+    var(--yankees-navy) 0%,
+    var(--yankees-navy-light) 100%
+  );
+  color: var(--yankees-white);
+}
+
+.featured-game .game-date,
+.featured-game .venue,
+.featured-game .team-label {
+  color: var(--yankees-silver) !important;
+}
+
+.featured-game .vs {
+  color: var(--yankees-gold) !important;
+}
+
+.featured-game .team-score {
+  color: var(--yankees-white) !important;
+}
+
+.next-game-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--yankees-gold);
+  margin-bottom: 0.35rem;
+  padding-left: 0.15rem;
+}
+
+/* =========================================
+   GAME CARD
+   ========================================= */
+.game-card {
+  background: var(--yankees-white);
+  border: 1px solid #d8e2ed;
+  border-radius: 10px;
+  padding: 1.1rem 1.25rem;
+  box-shadow: 0 2px 6px rgba(12, 35, 64, 0.06);
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+.game-card:hover {
+  box-shadow: 0 6px 18px rgba(12, 35, 64, 0.12);
+  transform: translateY(-1px);
+}
+
+.game-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.game-date {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #5a6a80;
+  letter-spacing: 0.01em;
+}
+
+.game-badges {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+/* =========================================
+   BADGES
+   ========================================= */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge-home {
+  background: var(--yankees-navy);
+  color: var(--yankees-white);
+}
+
+.badge-away {
+  background: #e8edf3;
+  color: var(--yankees-navy);
+}
+
+.badge-live {
+  background: #ff4444;
+  color: white;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.badge-win {
+  background: var(--yankees-green);
+  color: white;
+}
+
+.badge-loss {
+  background: var(--yankees-red);
+  color: white;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* =========================================
+   GAME MATCHUP
+   ========================================= */
+.game-matchup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.team {
+  flex: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.team:last-child {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.team-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--yankees-navy);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.team-score {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--yankees-navy);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.vs {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--yankees-gold);
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+}
+
+/* =========================================
+   GAME FOOTER
+   ========================================= */
+.game-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e8edf3;
+}
+
+.venue {
+  font-size: 0.78rem;
+  color: #5a6a80;
+}
+
+.broadcasts {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.broadcast-badge {
+  display: inline-block;
+  padding: 0.18rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: #e8edf3;
+  color: var(--yankees-navy);
+  border: 1px solid #c8d4e3;
+  white-space: nowrap;
+}
+
+/* =========================================
+   INFINITE SCROLL
+   ========================================= */
+.infinite-scroll-sentinel {
+  padding: 1.5rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  color: #5a6a80;
+  font-size: 0.875rem;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #d8e2ed;
+  border-top-color: var(--yankees-navy);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.no-more-games {
+  color: #8a9db5;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+/* =========================================
+   ERROR / EMPTY STATES
+   ========================================= */
+.error-message {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  color: #991b1b;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: #5a6a80;
+}
+
+.mock-data-notice {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 0.75rem 1.1rem;
+  color: #1e40af;
+  margin-bottom: 1.25rem;
+  font-size: 0.85rem;
+}
+
+.mock-data-notice a {
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.games-count {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #8a9db5;
+  padding: 0.5rem 0 1rem;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (max-width: 600px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .header-title {
+    font-size: 1rem;
+  }
+
+  .nav-link {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.75rem;
+  }
+
+  .page-container {
+    padding: 1.25rem 1rem;
+  }
+
+  .page-title {
+    font-size: 1.3rem;
+  }
+
+  .game-card {
+    padding: 0.9rem 1rem;
+  }
+
+  .team-label {
+    font-size: 0.875rem;
+  }
+
+  .team-score {
+    font-size: 1.2rem;
+  }
+
+  .game-matchup {
+    gap: 0.6rem;
+  }
+}
