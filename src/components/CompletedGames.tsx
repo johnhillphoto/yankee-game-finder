@@ -14,6 +14,8 @@ export default function CompletedGames() {
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
+  const [usingMockData, setUsingMockData] = useState(false);
+  const [totalGames, setTotalGames] = useState(0);
 
   const loadGames = useCallback(
     async (pageNum: number) => {
@@ -26,10 +28,13 @@ export default function CompletedGames() {
         );
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         const data = await res.json();
-        setGames((prev) =>
-          pageNum === 0 ? data.games : [...prev, ...data.games]
-        );
-        setHasMore((pageNum + 1) * PAGE_SIZE < data.totalGames);
+        if (data.usingMockData) setUsingMockData(true);
+        setTotalGames(data.totalGames);
+        setGames((prev) => {
+          const next = pageNum === 0 ? data.games : [...prev, ...data.games];
+          setHasMore(next.length < data.totalGames);
+          return next;
+        });
         setPage(pageNum + 1);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load games");
@@ -53,6 +58,16 @@ export default function CompletedGames() {
 
   return (
     <div>
+      {usingMockData && (
+        <div className="mock-data-notice">
+          ℹ️ Showing sample results data. In production, this uses live data from the{" "}
+          <a href="https://statsapi.mlb.com" target="_blank" rel="noopener noreferrer">
+            MLB Stats API
+          </a>
+          .
+        </div>
+      )}
+
       {error && <div className="error-message">{error}</div>}
 
       {games.length === 0 && !loading && !error && (
@@ -74,6 +89,12 @@ export default function CompletedGames() {
         hasMore={hasMore}
         loading={loading}
       />
+
+      {!loading && totalGames > 0 && (
+        <p className="games-count">
+          Showing {games.length} of {totalGames} completed games
+        </p>
+      )}
     </div>
   );
 }

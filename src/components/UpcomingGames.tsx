@@ -18,6 +18,7 @@ export default function UpcomingGames() {
   const [initialized, setInitialized] = useState(false);
   const [usingMockData, setUsingMockData] = useState(false);
   const [totalGames, setTotalGames] = useState(0);
+  const [loadedCount, setLoadedCount] = useState(0);
 
   const loadGames = useCallback(
     async (pageNum: number, pageSize: number) => {
@@ -32,9 +33,12 @@ export default function UpcomingGames() {
         const data = await res.json();
         if (data.usingMockData) setUsingMockData(true);
         setTotalGames(data.totalGames);
-        setGames((prev) => (pageNum === 0 ? data.games : [...prev, ...data.games]));
-        const loadedSoFar = pageNum === 0 ? data.games.length : games.length + data.games.length;
-        setHasMore(loadedSoFar < data.totalGames);
+        setGames((prev) => {
+          const next = pageNum === 0 ? data.games : [...prev, ...data.games];
+          setLoadedCount(next.length);
+          setHasMore(next.length < data.totalGames);
+          return next;
+        });
         setPage(pageNum === 0 ? 1 : pageNum + 1);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load games");
@@ -42,7 +46,6 @@ export default function UpcomingGames() {
         setLoading(false);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [loading]
   );
 
@@ -98,7 +101,7 @@ export default function UpcomingGames() {
 
       {!loading && totalGames > 0 && (
         <p className="games-count">
-          Showing {games.length} of {totalGames} upcoming games
+          Showing {loadedCount} of {totalGames} upcoming games
         </p>
       )}
     </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import NavLinks from "@/components/NavLinks";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,14 +21,7 @@ export default function RootLayout({
               <span className="header-logo" aria-label="Yankees logo">⚾</span>
               <h1 className="header-title">NY Yankees Game Finder</h1>
             </div>
-            <nav className="header-nav">
-              <Link href="/" className="nav-link">
-                Upcoming Games
-              </Link>
-              <Link href="/completed" className="nav-link">
-                Completed Games
-              </Link>
-            </nav>
+            <NavLinks />
           </div>
         </header>
         <main className="site-main">{children}</main>
